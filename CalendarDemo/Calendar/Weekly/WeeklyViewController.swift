@@ -27,7 +27,7 @@ class WeeklyViewController: UIViewController {
     cv.dataSource = self
     cv.delegate = self
     cv.isPagingEnabled = true
-    // cv.isScrollEnabled = false
+    cv.isScrollEnabled = false
     cv.register(WeekDayCell.self, forCellWithReuseIdentifier: WeekDayCell.identifier)
     return cv
   }()
