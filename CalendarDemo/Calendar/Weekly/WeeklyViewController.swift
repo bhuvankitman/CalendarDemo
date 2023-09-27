@@ -82,7 +82,8 @@ extension WeeklyViewController: UICollectionViewDataSource {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeekDayCell.identifier, for: indexPath) as? WeekDayCell else {
       return .init()
     }
-    cell.title = viewModel.days[indexPath.item].day
+    let day = viewModel.days[indexPath.item]
+    cell.configure(title: day.day, isActive: day.isToday())
     return cell
   }
 

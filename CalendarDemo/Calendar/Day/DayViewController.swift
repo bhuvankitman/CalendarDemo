@@ -5,30 +5,6 @@ protocol DayViewDelegate: AnyObject {
   func scrollTo(page: CGFloat)
 }
 
-struct Event: Identifiable {
-  let id: String = UUID().uuidString
-  let title: String
-  let date: Date
-
-  init(title: String, date: Date) {
-    self.title = title
-    self.date = date
-  }
-}
-
-extension Collection where Element == Event {
-  static var sampleEvents: [Event] {
-    [.init(title: "Travel to Birmingham", date: .now),
-     .init(title: "Away vs Aston Villa ", date: .now),
-     .init(title: "Travel home", date: .now),
-     .init(title: "Training session", date: .now),
-     .init(title: "Barcelona vs Real Madrid", date: .now),
-     .init(title: "Health screening", date: .now),
-     .init(title: "Team briefing", date: .now)
-    ]
-  }
-}
-
 struct DayViewModel {
   let days: [Day]
 
@@ -37,7 +13,7 @@ struct DayViewModel {
   }
 
   func indexPathOfTodaysDate() -> IndexPath {
-    guard let index = days.firstIndex(where: { Calendar.current.isDateInToday($0.date!) }) else {
+    guard let index = days.firstIndex(where: { $0.isToday() }) else {
       return .init(item: 0, section: 0)
     }
     return .init(item: index, section: 0)
@@ -46,7 +22,7 @@ struct DayViewModel {
 
 final class DayViewController: UIViewController {
 
-  weak var delegate: DayViewDelegate?
+  private weak var delegate: DayViewDelegate?
 
   lazy var layout: UICollectionViewFlowLayout = {
     let layout = UICollectionViewFlowLayout()
@@ -66,8 +42,9 @@ final class DayViewController: UIViewController {
 
   private let viewModel: DayViewModel
 
-  init(viewModel: DayViewModel) {
+  init(viewModel: DayViewModel, delegate: DayViewDelegate?) {
     self.viewModel = viewModel
+    self.delegate = delegate
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -100,6 +77,7 @@ final class DayViewController: UIViewController {
 }
 
 extension DayViewController: UICollectionViewDataSource {
+
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DayCell.identifer, for: indexPath) as? DayCell
@@ -107,7 +85,7 @@ extension DayViewController: UICollectionViewDataSource {
       return .init()
     }
     let day = viewModel.days[indexPath.item]
-    cell.configure(with: .init(date: day.date ?? .now, events: day.events))
+    cell.configure(with: .init(date: day.date, events: day.events))
     return cell
   }
 

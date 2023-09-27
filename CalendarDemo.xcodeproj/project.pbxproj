@@ -31,6 +31,8 @@
 		77F61EDC2AC42F1200C72C51 /* WeeklyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F61EDB2AC42F1200C72C51 /* WeeklyViewModel.swift */; };
 		77F61EDE2AC42FE300C72C51 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F61EDD2AC42FE300C72C51 /* ViewController.swift */; };
 		77F61EE02AC434C700C72C51 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F61EDF2AC434C700C72C51 /* CalendarViewModel.swift */; };
+		77F61EE22AC4756400C72C51 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F61EE12AC4756400C72C51 /* Day.swift */; };
+		77F61EE42AC4760B00C72C51 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F61EE32AC4760B00C72C51 /* Event.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +61,8 @@
 		77F61EDB2AC42F1200C72C51 /* WeeklyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyViewModel.swift; sourceTree = "<group>"; };
 		77F61EDD2AC42FE300C72C51 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		77F61EDF2AC434C700C72C51 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		77F61EE12AC4756400C72C51 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		77F61EE32AC4760B00C72C51 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				77B0F6BC2AB9BA4F0039F199 /* DayViewController.swift */,
+				77F61EE12AC4756400C72C51 /* Day.swift */,
+				77F61EE32AC4760B00C72C51 /* Event.swift */,
 				77B0F6B62AB9B1820039F199 /* DayCell.swift */,
 				778C42412ABB41DB00113558 /* DayCellViewModel.swift */,
 				77ADB2582AC2F6CB00F0F450 /* DayView.swift */,
@@ -241,8 +247,10 @@
 				77B0F6B72AB9B1820039F199 /* DayCell.swift in Sources */,
 				778C42562ABCE8D000113558 /* MonthlyViewModel.swift in Sources */,
 				77202EE62AB4A38400C114C1 /* AppDelegate.swift in Sources */,
+				77F61EE42AC4760B00C72C51 /* Event.swift in Sources */,
 				778C42442ABC397E00113558 /* UIViewController+Child.swift in Sources */,
 				778C42462ABC566100113558 /* MonthlyViewController.swift in Sources */,
+				77F61EE22AC4756400C72C51 /* Day.swift in Sources */,
 				77B0F6BD2AB9BA4F0039F199 /* DayViewController.swift in Sources */,
 				77B0F6BF2AB9E05D0039F199 /* WeekDayCell.swift in Sources */,
 				778C42542ABC98CC00113558 /* MonthlyHeaderView.swift in Sources */,

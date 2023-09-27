@@ -1,56 +1,43 @@
 import Foundation
 
-
 struct Month {
   let id: Int
   let title: String
   let days: [Day]
 }
 
-struct Day {
-  let day: String
-  let date: Date?
-  let events: [Event]
-
-  init(day: String, date: Date? = nil, events: [Event] = []) {
-    self.day = day
-    self.date = date
-    self.events = events
-  }
-
-  func isToday() -> Bool {
-    guard let date else { return false }
-    return Calendar.current.isDateInToday(date)
-  }
-}
-
 struct MonthlyViewModel {
 
   // MARK: - Properties
-  var months: [Month] = []
-  var nextIndex: Int {
-    months.count > 0 ? months.count : 0
-  }
+//  var nextIndex: Int {
+//    months.count > 0 ? months.count : 0
+//  }
 
   // MARK: - Initializer
   let selectedDate: Date
+  let months: [Month]
 
-  init(selectedDate: Date, monthBackwards: Int, monthForwards: Int) {
+//  init(selectedDate: Date, monthBackwards: Int, monthForwards: Int) {
+//    self.selectedDate = selectedDate
+//
+//    // Past months
+//    months.append(contentsOf: getBackwardMonths(fromDate: selectedDate,
+//                                                monthBackwards: monthBackwards))
+//
+//    // Month for the given date
+//    months.append(.init(id: nextIndex,
+//                        title: selectedDate.monthString,
+//                        days: getMonthDays(forDate: selectedDate)))
+//
+//    // Future months
+//    months.append(contentsOf: getForwardMonths(fromDate: selectedDate,
+//                                               monthForwards: monthForwards,
+//                                               nextIndex: nextIndex))
+//  }
+
+  init(selectedDate: Date, months: [Month]) {
     self.selectedDate = selectedDate
-
-    // Past months
-    months.append(contentsOf: getBackwardMonths(fromDate: selectedDate,
-                                                monthBackwards: monthBackwards))
-
-    // Month for the given date
-    months.append(.init(id: nextIndex,
-                        title: selectedDate.monthString,
-                        days: getMonthDays(forDate: selectedDate)))
-
-    // Future months
-    months.append(contentsOf: getForwardMonths(fromDate: selectedDate,
-                                               monthForwards: monthForwards,
-                                               nextIndex: nextIndex))
+    self.months = months
   }
 
   func getBackwardMonths(fromDate date: Date, monthBackwards: Int) -> [Month] {

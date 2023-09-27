@@ -70,12 +70,8 @@ extension MonthlyViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeekDayCell.identifier, for: indexPath) as! WeekDayCell
 
-    let days = viewModel.days(for: indexPath.section)
-    if !days.isEmpty {
-      let day = days[indexPath.item]
-      cell.title = day.day
-      cell.dayLabel.textColor = day.isToday() ? .red : .black
-    }
+    let day = viewModel.days(for: indexPath.section)[indexPath.item]
+    cell.configure(title: day.day, isActive: day.isToday())
 
     return cell
   }
@@ -89,8 +85,7 @@ extension MonthlyViewController: UICollectionViewDelegate {
     guard !days.isEmpty else { return }
     let selectedDay = days[indexPath.item]
 
-    guard let date = selectedDay.date else { return }
-    print(date.dayString)
+    print(selectedDay.date.dayString)
     // TODO: Handle day selection
   }
 

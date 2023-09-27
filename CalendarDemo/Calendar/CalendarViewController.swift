@@ -11,14 +11,13 @@ class CalendarViewController: UIViewController {
 
   // MARK: - UI Views
   lazy var dayVc: DayViewController = {
-    let vm = DayViewModel(days: viewModel.weeklyDays())
-    let vc = DayViewController(viewModel: vm)
-    vc.delegate = self
+    let vm = DayViewModel(days: viewModel.totalDays)
+    let vc = DayViewController(viewModel: vm, delegate: self)
     return vc
   }()
 
   lazy var weekVc: WeeklyViewController = {
-    let vc = WeeklyViewController(viewModel: .init(days: viewModel.weeklyDays()))
+    let vc = WeeklyViewController(viewModel: .init(days: viewModel.totalDays))
     return vc
   }()
 
@@ -44,10 +43,16 @@ class CalendarViewController: UIViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    dayVc.scrollToTodaysDate()
+    scrollToTodaysDate()
   }
 
   var heightConstraint: NSLayoutConstraint?
+
+  // MARK: - Todays Date
+  func scrollToTodaysDate() {
+    dayVc.scrollToTodaysDate()
+    weekVc.scrollTo(page: viewModel.todaysWeekPage())
+  }
 
   // MARK: - Setup Views
   func setupWeekView() {
@@ -110,8 +115,7 @@ class CalendarViewController: UIViewController {
       // Presnt monthly controller when the week view height passes the threshold
       guard dynamicHeight > Constants.weekViewThresholdHeight else { return }
       let vm = MonthlyViewModel(selectedDate: .now,
-                                monthBackwards: viewModel.monthBackward,
-                                monthForwards: viewModel.monthForward)
+                                months: viewModel.totalMonths)
       let vc = MonthlyViewController(viewModel: vm)
       present(vc, animated: true) {
         resetWeekViewHeight()
