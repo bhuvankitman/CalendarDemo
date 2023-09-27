@@ -1,29 +1,30 @@
 import Foundation
 
+
+struct Month {
+  let id: Int
+  let title: String
+  let days: [Day]
+}
+
+struct Day {
+  let day: String
+  let date: Date?
+  let events: [Event]
+
+  init(day: String, date: Date? = nil, events: [Event] = []) {
+    self.day = day
+    self.date = date
+    self.events = events
+  }
+
+  func isToday() -> Bool {
+    guard let date else { return false }
+    return Calendar.current.isDateInToday(date)
+  }
+}
+
 struct MonthlyViewModel {
-
-  struct Month {
-    let id: Int
-    let title: String
-    let days: [Day]
-  }
-
-  struct Day {
-    let day: String
-    let date: Date?
-    let data: Any?
-
-    init(day: String, date: Date? = nil, data: Any? = nil) {
-      self.day = day
-      self.date = date
-      self.data = data
-    }
-
-    func isToday() -> Bool {
-      guard let date else { return false }
-      return Calendar.current.isDateInToday(date)
-    }
-  }
 
   // MARK: - Properties
   var months: [Month] = []

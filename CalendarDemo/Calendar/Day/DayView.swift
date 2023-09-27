@@ -22,12 +22,9 @@ struct DayView: View {
         Text(viewModel.date.weekdayString)
           .font(.footnote)
         Text(viewModel.date.dayString)
-          .font(.title3)
-          .bold()
+          .font(.title)
       }
       .frame(width: 60, height: 60)
-      .foregroundStyle(Color.white)
-      .background(Color.black.opacity(0.8))
       .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
       Spacer()
     }
@@ -35,8 +32,7 @@ struct DayView: View {
 
   var events: some View {
     VStack {
-      ForEach(0..<viewModel.events.count, id: \.self) { index in
-        let event = viewModel.events[index]
+      ForEach(viewModel.events) { event in        
         EventView(title: event.title,
                   subtitle: "11:30 - 12:30 (60 mins)",
                   backgroundColor: Color(uiColor: .random()))

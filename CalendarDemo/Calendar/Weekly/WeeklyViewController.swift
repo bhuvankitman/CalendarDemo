@@ -1,11 +1,11 @@
 import UIKit
 import SnapKit
 
-protocol WeekDelegate: AnyObject {
+protocol WeeklyViewDelegate: AnyObject {
   func didSelectIndexPath(_ indexPath: IndexPath)
 }
 
-class WeekViewController: UIViewController {
+class WeeklyViewController: UIViewController {
 
   // MARK: - UI Views
   lazy var layout: UICollectionViewFlowLayout = {
@@ -27,13 +27,23 @@ class WeekViewController: UIViewController {
     cv.dataSource = self
     cv.delegate = self
     cv.isPagingEnabled = true
-    cv.isScrollEnabled = false
+    // cv.isScrollEnabled = false
     cv.register(WeekDayCell.self, forCellWithReuseIdentifier: WeekDayCell.identifier)
     return cv
   }()
 
   // MARK: - Properties
-  weak var delegate: WeekDelegate?
+  weak var delegate: WeeklyViewDelegate?
+
+  let viewModel: WeeklyViewModel
+  init(viewModel: WeeklyViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   // MARK: - Lifecycle
   override func viewDidLoad() {
@@ -67,13 +77,12 @@ class WeekViewController: UIViewController {
 }
 
 // MARK: - UICollectionViewDataSource
-extension WeekViewController: UICollectionViewDataSource {
+extension WeeklyViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeekDayCell.identifier, for: indexPath) as? WeekDayCell else {
       return .init()
     }
-    // cell.backgroundColor = .random()
-    cell.title = "\(indexPath.row + 1)"
+    cell.title = viewModel.days[indexPath.item].day
     return cell
   }
 
@@ -83,42 +92,18 @@ extension WeekViewController: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 14
+    viewModel.days.count
   }
-
-//  func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//    switch kind {
-//      // 1
-//    case UICollectionView.elementKindSectionHeader:
-//      // 2
-//      let headerView = collectionView.dequeueReusableSupplementaryView(
-//        ofKind: kind,
-//        withReuseIdentifier: WeekHeaderView.identifier,
-//        for: indexPath)
-//
-//      // 3
-//      guard let typedHeaderView = headerView as? WeekHeaderView
-//      else { return headerView }
-//
-//      // 4
-//      let searchTerm = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
-//      typedHeaderView.weekdayLabel.text = searchTerm.randomElement()
-//      return typedHeaderView
-//    default:
-//      // 5
-//      assert(false, "Invalid element type")
-//    }
-//  }
 }
 
-extension WeekViewController: UICollectionViewDelegate {
+extension WeeklyViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     delegate?.didSelectIndexPath(indexPath)
   }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension WeekViewController: UICollectionViewDelegateFlowLayout {
+extension WeeklyViewController: UICollectionViewDelegateFlowLayout {
 
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let columns: CGFloat = 7

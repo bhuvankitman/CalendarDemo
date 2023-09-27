@@ -16,24 +16,35 @@ struct Event: Identifiable {
   }
 }
 
-struct DayViewModel {
-  let startDate: Date
-  let endDate: Date
-  let events: [Event]
-
-  init(startDate: Date, endDate: Date, events: [Event]) {
-    self.startDate = startDate
-    self.endDate = endDate
-    self.events = events
+extension Collection where Element == Event {
+  static var sampleEvents: [Event] {
+    [.init(title: "Travel to Birmingham", date: .now),
+     .init(title: "Away vs Aston Villa ", date: .now),
+     .init(title: "Travel home", date: .now),
+     .init(title: "Training session", date: .now),
+     .init(title: "Barcelona vs Real Madrid", date: .now),
+     .init(title: "Health screening", date: .now),
+     .init(title: "Team briefing", date: .now)
+    ]
   }
-
-  var totalDays: [String] {
-    return []
-  }
-
 }
 
-class DayViewController: UIViewController {
+struct DayViewModel {
+  let days: [Day]
+
+  init(days: [Day]) {
+    self.days = days    
+  }
+
+  func indexPathOfTodaysDate() -> IndexPath {
+    guard let index = days.firstIndex(where: { Calendar.current.isDateInToday($0.date!) }) else {
+      return .init(item: 0, section: 0)
+    }
+    return .init(item: index, section: 0)
+  }
+}
+
+final class DayViewController: UIViewController {
 
   weak var delegate: DayViewDelegate?
 
@@ -80,6 +91,12 @@ class DayViewController: UIViewController {
       collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     ])
   }
+
+  func scrollToTodaysDate() {
+    collectionView.scrollToItem(at: viewModel.indexPathOfTodaysDate(),
+                                at: .top,
+                                animated: false)
+  }
 }
 
 extension DayViewController: UICollectionViewDataSource {
@@ -89,13 +106,8 @@ extension DayViewController: UICollectionViewDataSource {
     else {
       return .init()
     }
-    let events: [Event] = [.init(title: "Travel to Birmingham", date: .now),
-                           .init(title: "Away vs Aston Villa ", date: .now),
-                           .init(title: "Travel home", date: .now)]
-
-
-    cell.collectionView = collectionView
-    cell.configure(with: .init(date: .now, events: events))
+    let day = viewModel.days[indexPath.item]
+    cell.configure(with: .init(date: day.date ?? .now, events: day.events))
     return cell
   }
 
@@ -105,7 +117,7 @@ extension DayViewController: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 14
+    viewModel.days.count
   }
 
   func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

@@ -11,35 +11,40 @@ class CalendarViewController: UIViewController {
 
   // MARK: - UI Views
   lazy var dayVc: DayViewController = {
-
-    let previousMonthDate = Calendar.current.date(byAdding: .month, value: -1, to: .now) ?? .distantPast
-    let nextMonthDate = Calendar.current.date(byAdding: .month, value: 1, to: .now) ?? .distantFuture
-
-    let events = [
-      Event(title: "Team Breifing", date: Date()),
-      Event(title: "Away Vs Aston Villa", date: Calendar.current.date(byAdding: .day, value: -5, to: Date()) ?? .now),
-    ]
-
-    let vm = DayViewModel(startDate: previousMonthDate,
-                          endDate: nextMonthDate,
-                          events: events)
+    let vm = DayViewModel(days: viewModel.weeklyDays())
     let vc = DayViewController(viewModel: vm)
     vc.delegate = self
     return vc
   }()
 
-  // MARK: - Properties
-  lazy var weekVc: WeekViewController = {
-    let vc = WeekViewController()
+  lazy var weekVc: WeeklyViewController = {
+    let vc = WeeklyViewController(viewModel: .init(days: viewModel.weeklyDays()))
     return vc
   }()
+
+  // MARK: - Properties
+  private let viewModel: CalendarViewModel
+
+  init(viewModel: CalendarViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   // MARK: - Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    view.backgroundColor = .white
     setupWeekView()
     setupDayView()
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    dayVc.scrollToTodaysDate()
   }
 
   var heightConstraint: NSLayoutConstraint?
@@ -105,8 +110,8 @@ class CalendarViewController: UIViewController {
       // Presnt monthly controller when the week view height passes the threshold
       guard dynamicHeight > Constants.weekViewThresholdHeight else { return }
       let vm = MonthlyViewModel(selectedDate: .now,
-                                monthBackwards: 8,
-                                monthForwards: 2)
+                                monthBackwards: viewModel.monthBackward,
+                                monthForwards: viewModel.monthForward)
       let vc = MonthlyViewController(viewModel: vm)
       present(vc, animated: true) {
         resetWeekViewHeight()

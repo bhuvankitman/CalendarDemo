@@ -9,9 +9,6 @@ class DayCell: UICollectionViewCell {
   static let identifer = "DayCell"
 
   // MARK: - UI Views
-
-  var collectionView: UICollectionView?
-
   lazy var labelContainer: UIView = {
     let container = UIView()
     container.addSubview(dateLabel)
