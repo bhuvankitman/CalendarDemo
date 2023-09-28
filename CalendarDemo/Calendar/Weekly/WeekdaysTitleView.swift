@@ -1,5 +1,22 @@
 import UIKit
 import SnapKit
+import SwiftUI
+
+
+struct WeekDaySymbolView: View {
+
+  let symbols: [String]
+
+  var body: some View {
+    HStack(spacing: 0) {
+      ForEach(symbols, id: \.self) { symbol in
+        Text(symbol)
+          .frame(maxWidth: .infinity)
+          .multilineTextAlignment(.center)
+      }
+    }
+  }
+}
 
 class WeekdaysTitleView: UIView {
 
@@ -14,24 +31,6 @@ class WeekdaysTitleView: UIView {
   }
 
   // MARK: - UI Views
-
-  lazy var weekDayStack: UIStackView = {
-    let stack = UIStackView()
-    stack.axis = .horizontal
-    stack.distribution = .fillEqually
-    stack.translatesAutoresizingMaskIntoConstraints = false
-
-    for weekday in weekdayNames {
-      let label = UILabel()
-      label.textAlignment = .center
-      label.text = weekday
-      label.textColor = .black
-      label.adjustsFontSizeToFitWidth = true
-      stack.addArrangedSubview(label)
-    }
-
-    return stack
-  }()
 
   // MARK: - Initializer
   let firstWeekday: FirstWeekDay
@@ -59,9 +58,12 @@ class WeekdaysTitleView: UIView {
 
   // MARK: - Setup views
   func setupViews() {
-    addSubview(weekDayStack)
+    guard let symbolView = UIHostingController(rootView: WeekDaySymbolView(symbols: weekdayNames)).view else {
+      return
+    }
 
-    weekDayStack.snp.makeConstraints { make in
+    addSubview(symbolView)
+    symbolView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
   }
